@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIZ-OMICS | Keyword Bingo Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-light: #243158;
+    --navy-deep: #0d1829;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-pale: #f5e9c8;
+    --white: #ffffff;
+    --off-white: #f8f6f0;
+    --aqa-green: #009639;
+    --aqa-green-dark: #006e29;
+    --ocr-teal: #009fae;
+    --ocr-teal-dark: #007a87;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── BACKGROUND DECORATION ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 10% 20%, rgba(201,168,76,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(201,168,76,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── BINGO BALL FLOATERS ─── */
+  .bg-balls {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-ball {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.04;
+    animation: floatBall linear infinite;
+  }
+  @keyframes floatBall {
+    0%   { transform: translateY(110vh) rotate(0deg); }
+    100% { transform: translateY(-20vh) rotate(360deg); }
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    position: relative;
+    z-index: 10;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -5%;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 22px;
+    padding: 8px 16px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 8px 100%);
+  }
+  .header-text { display: flex; flex-direction: column; }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .header-spacer { flex: 1; }
+  .header-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 64px 32px 48px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.1s forwards;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-title span {
+    color: var(--gold);
+  }
+  .hero-subtitle {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px;
+    margin: 16px auto 0;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.35s forwards;
+  }
+  .bingo-balls-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.5s forwards;
+  }
+  .mini-ball {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 13px;
+    position: relative;
+    cursor: default;
+  }
+  .mini-ball::after {
+    content: '';
+    position: absolute;
+    top: 5px; left: 8px;
+    width: 8px; height: 5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: rotate(-30deg);
+  }
+  .ball-1 { background: radial-gradient(circle at 35% 35%, #e8c96a, var(--gold)); color: var(--navy); }
+  .ball-2 { background: radial-gradient(circle at 35% 35%, #3a4f7a, var(--navy-light)); color: var(--gold); }
+  .ball-3 { background: radial-gradient(circle at 35% 35%, #22b059, var(--aqa-green)); color: white; }
+  .ball-4 { background: radial-gradient(circle at 35% 35%, #20bfd0, var(--ocr-teal)); color: white; }
+  .ball-5 { background: radial-gradient(circle at 35% 35%, #c94c4c, #8b1a1a); color: white; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px 32px;
+  }
+  .divider-line { flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
+  .divider-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.5);
+  }
+
+  /* ─── CARD GRID ─── */
+  .card-grid {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 32px 64px;
+  }
+
+  /* ─── GAME CARD ─── */
+  .game-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.5s forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .game-card:nth-child(1) { animation-delay: 0.55s; }
+  .game-card:nth-child(2) { animation-delay: 0.7s; }
+  .game-card:nth-child(3) { animation-delay: 0.85s; }
+
+  .game-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+  }
+
+  /* Card colour variants */
+  .card-econ {
+    background: linear-gradient(160deg, #0a1f12 0%, #06360f 60%, #004d18 100%);
+    border: 1px solid rgba(0,150,57,0.4);
+    box-shadow: 0 8px 32px rgba(0,150,57,0.15);
+  }
+  .card-biz {
+    background: linear-gradient(160deg, #0d1a30 0%, #1a2744 60%, #243158 100%);
+    border: 1px solid rgba(201,168,76,0.3);
+    box-shadow: 0 8px 32px rgba(201,168,76,0.1);
+  }
+  .card-ocr {
+    background: linear-gradient(160deg, #041618 0%, #003840 60%, #005059 100%);
+    border: 1px solid rgba(0,159,174,0.4);
+    box-shadow: 0 8px 32px rgba(0,159,174,0.15);
+  }
+
+  /* Card inner glow on hover */
+  .game-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    border-radius: 12px;
+  }
+  .card-econ::before  { background: radial-gradient(ellipse at 50% 0%, rgba(0,150,57,0.18), transparent 70%); }
+  .card-biz::before   { background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.12), transparent 70%); }
+  .card-ocr::before   { background: radial-gradient(ellipse at 50% 0%, rgba(0,159,174,0.18), transparent 70%); }
+  .game-card:hover::before { opacity: 1; }
+
+  /* Card top stripe */
+  .card-stripe {
+    height: 4px;
+    width: 100%;
+  }
+  .stripe-econ { background: linear-gradient(90deg, var(--aqa-green), #00c44e); }
+  .stripe-biz  { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .stripe-ocr  { background: linear-gradient(90deg, var(--ocr-teal), #00d4e8); }
+
+  .card-body { padding: 28px 28px 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    width: fit-content;
+  }
+  .tag-econ { background: rgba(0,150,57,0.2); color: #4dd881; border: 1px solid rgba(0,150,57,0.3); }
+  .tag-biz  { background: rgba(201,168,76,0.15); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.25); }
+  .tag-ocr  { background: rgba(0,159,174,0.2); color: #4de8f5; border: 1px solid rgba(0,159,174,0.3); }
+
+  .card-bingo-icon {
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.25;
+  }
+  .card-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meta-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+  .meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+  }
+
+  .card-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: padding 0.2s;
+  }
+  .card-econ .card-cta { background: rgba(0,150,57,0.2); color: #4dd881; }
+  .card-biz  .card-cta { background: rgba(201,168,76,0.15); color: var(--gold-light); }
+  .card-ocr  .card-cta { background: rgba(0,159,174,0.2); color: #4de8f5; }
+  .game-card:hover .card-cta { padding-right: 22px; }
+
+  .cta-arrow {
+    font-size: 18px;
+    transition: transform 0.2s;
+  }
+  .game-card:hover .cta-arrow { transform: translateX(4px); }
+
+  /* ─── FOOTER ─── */
+  .site-footer {
+    position: relative;
+    z-index: 10;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding: 24px 32px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .footer-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+  }
+  .footer-note a { color: rgba(201,168,76,0.5); text-decoration: none; }
+  .footer-note a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- Floating background balls -->
+<div class="bg-balls">
+  <div class="bg-ball" style="width:120px;height:120px;left:5%;background:#c9a84c;animation-duration:18s;animation-delay:0s;"></div>
+  <div class="bg-ball" style="width:80px;height:80px;left:30%;background:#009639;animation-duration:22s;animation-delay:4s;"></div>
+  <div class="bg-ball" style="width:100px;height:100px;left:60%;background:#009fae;animation-duration:16s;animation-delay:2s;"></div>
+  <div class="bg-ball" style="width:60px;height:60px;left:80%;background:#c9a84c;animation-duration:20s;animation-delay:6s;"></div>
+  <div class="bg-ball" style="width:90px;height:90px;left:50%;background:#8b1a1a;animation-duration:24s;animation-delay:8s;"></div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="logo-badge">BIZ-OMICS</div>
+  <div class="header-text">
+    <div class="header-title">Keyword Bingo Hub</div>
+    <div class="header-sub">Interactive Revision Games</div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="header-badge">biz-omics.co.uk</div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">🎱 Revision Bingo Collection</div>
+  <h1 class="hero-title">Pick Your <span>Game</span></h1>
+  <p class="hero-subtitle">Test your subject knowledge with keyword bingo — call the terms, mark your card, race to five in a row.</p>
+  <div class="bingo-balls-row">
+    <div class="mini-ball ball-1">B</div>
+    <div class="mini-ball ball-2">I</div>
+    <div class="mini-ball ball-3">N</div>
+    <div class="mini-ball ball-4">G</div>
+    <div class="mini-ball ball-5">O</div>
+  </div>
+</section>
+
+<!-- Divider -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-label">Choose a subject</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- Card Grid -->
+<main class="card-grid">
+
+  <!-- AQA Economics -->
+  <a class="game-card card-econ" href="economics-bingo.html">
+    <div class="card-stripe stripe-econ"></div>
+    <div class="card-body">
+      <span class="card-tag tag-econ">AQA · A-Level</span>
+      <div class="card-bingo-icon">📈</div>
+      <div class="card-title">Economics<br>Keywords Bingo</div>
+      <div class="card-desc">Macro &amp; micro economics terminology — from AD/AS to market failure, monetary policy and beyond.</div>
+      <div class="card-meta">
+        <div class="meta-item">
+          <span class="meta-label">Level</span>
+          <span class="meta-value">A-Level</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Spec</span>
+          <span class="meta-value">AQA 7136</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Subject</span>
+          <span class="meta-value">Economics</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-cta">
+      <span>Play Now</span>
+      <span class="cta-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- AQA Business -->
+  <a class="game-card card-biz" href="business-bingo.html">
+    <div class="card-stripe stripe-biz"></div>
+    <div class="card-body">
+      <span class="card-tag tag-biz">AQA · A-Level</span>
+      <div class="card-bingo-icon">💼</div>
+      <div class="card-title">Business Studies<br>Keywords Bingo</div>
+      <div class="card-desc">Key business concepts covering finance, operations, marketing, strategy and people management.</div>
+      <div class="card-meta">
+        <div class="meta-item">
+          <span class="meta-label">Level</span>
+          <span class="meta-value">A-Level</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Spec</span>
+          <span class="meta-value">AQA 7132</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Subject</span>
+          <span class="meta-value">Business</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-cta">
+      <span>Play Now</span>
+      <span class="cta-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- OCR GCSE Business -->
+  <a class="game-card card-ocr" href="gcse-bingo.html">
+    <div class="card-stripe stripe-ocr"></div>
+    <div class="card-body">
+      <span class="card-tag tag-ocr">OCR · GCSE</span>
+      <div class="card-bingo-icon">🏪</div>
+      <div class="card-title">GCSE Business<br>Keywords Bingo</div>
+      <div class="card-desc">Foundational business vocabulary for OCR GCSE — enterprise, finance, marketing and operations.</div>
+      <div class="card-meta">
+        <div class="meta-item">
+          <span class="meta-label">Level</span>
+          <span class="meta-value">GCSE</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Spec</span>
+          <span class="meta-value">OCR J204</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Subject</span>
+          <span class="meta-value">Business</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-cta">
+      <span>Play Now</span>
+      <span class="cta-arrow">→</span>
+    </div>
+  </a>
+
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-logo">BIZ-OMICS</div>
+  <div class="footer-note">Interactive revision resources · <a href="https://biz-omics.co.uk">biz-omics.co.uk</a></div>
+</footer>
+
+</body>
+</html>
